@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KringloopBoek Scanner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">KringloopBoek</span>
+      </div>
+      <p class="tagline">Scan — Beoordeel — Koop slim</p>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Scanner sectie -->
+    <section class="scanner-section">
+      <div class="card">
+        <h2 class="card-title">Boek scannen</h2>
+
+        <div id="camera-area" class="camera-area hidden">
+          <video id="preview" class="camera-preview" autoplay muted playsinline></video>
+          <div class="scan-overlay">
+            <div class="scan-frame">
+              <div class="corner tl"></div>
+              <div class="corner tr"></div>
+              <div class="corner bl"></div>
+              <div class="corner br"></div>
+              <div class="scan-line"></div>
+            </div>
+            <p class="scan-hint">Richt op de barcode aan de achterkant</p>
+          </div>
+        </div>
+
+        <div class="scan-controls">
+          <button id="btn-camera" class="btn btn-primary">
+            <span class="btn-icon">📷</span> Camera starten
+          </button>
+          <button id="btn-stop" class="btn btn-secondary hidden">
+            <span class="btn-icon">⏹</span> Stop camera
+          </button>
+        </div>
+
+        <div class="divider"><span>of voer ISBN in</span></div>
+
+        <div class="isbn-input-group">
+          <input
+            type="text"
+            id="isbn-input"
+            class="isbn-input"
+            placeholder="ISBN bijv. 9789041419200"
+            maxlength="17"
+            inputmode="numeric"
+          />
+          <button id="btn-zoek" class="btn btn-primary">
+            <span class="btn-icon">🔍</span> Zoeken
+          </button>
+        </div>
+
+        <p id="scan-status" class="scan-status"></p>
+      </div>
+    </section>
+
+    <!-- Resultaat sectie -->
+    <section id="result-section" class="result-section hidden">
+      <div class="card result-card">
+
+        <div class="book-header">
+          <div id="book-cover" class="book-cover">
+            <div class="cover-placeholder">📖</div>
+          </div>
+          <div class="book-meta">
+            <span class="book-label">Gevonden boek</span>
+            <h2 id="book-title" class="book-title"></h2>
+            <p id="book-author" class="book-author"></p>
+            <p id="book-year" class="book-year"></p>
+          </div>
+        </div>
+
+        <!-- Prijskaartje beoordeling -->
+        <div class="price-tag-wrapper">
+          <div class="price-tag">
+            <div class="tag-hole"></div>
+            <div class="tag-header">Kringloop Beoordeling</div>
+            <div class="rating-grid">
+              <div class="rating-item">
+                <span class="rating-label">Populariteit</span>
+                <div id="populariteit-stars" class="stars"></div>
+                <span id="populariteit-text" class="rating-text"></span>
+              </div>
+              <div class="rating-item">
+                <span class="rating-label">Verkoopkans</span>
+                <div id="verkoopkans-bar" class="bar-container">
+                  <div id="verkoopkans-fill" class="bar-fill"></div>
+                </div>
+                <span id="verkoopkans-text" class="rating-text"></span>
+              </div>
+              <div class="rating-item">
+                <span class="rating-label">Bol.com Ranking</span>
+                <span id="bol-ranking" class="ranking-badge"></span>
+              </div>
+              <div class="rating-item full-width">
+                <span class="rating-label">Advies</span>
+                <div id="advies" class="advies-box"></div>
+              </div>
+            </div>
+            <div class="tag-footer">ISBN: <span id="tag-isbn"></span></div>
+            <div id="data-uitleg" class="data-uitleg"></div>
+          </div>
+        </div>
+
+        <!-- Bol.com links -->
+        <div class="bol-links">
+          <h3 class="links-title">Bekijk op bol.com</h3>
+          <div class="links-grid">
+            <a id="bol-nieuw-link" href="#" target="_blank" rel="noopener" class="bol-btn bol-nieuw">
+              <span class="bol-icon">🛒</span>
+              <span class="bol-text"><strong>Nieuw</strong><small>Vergelijk prijs</small></span>
+            </a>
+            <a id="bol-tweedehands-link" href="#" target="_blank" rel="noopener" class="bol-btn bol-tweedehands">
+              <span class="bol-icon">♻️</span>
+              <span class="bol-text"><strong>Tweedehands</strong><small>Zoek aanbod</small></span>
+            </a>
+          </div>
+          <a id="bol-search-link" href="#" target="_blank" rel="noopener" class="bol-btn bol-zoek">
+            <span class="bol-icon">🔎</span>
+            <span class="bol-text"><strong>Breed zoeken</strong><small>Op titel + auteur</small></span>
+          </a>
+        </div>
+
+        <button id="btn-reset" class="btn btn-secondary full-width mt">
+          ← Nieuw boek scannen
+        </button>
+      </div>
+    </section>
+
+    <!-- Geschiedenis -->
+    <section id="history-section" class="history-section hidden">
+      <div class="card">
+        <div class="history-header">
+          <h2 class="card-title">Gescande boeken</h2>
+          <button id="btn-clear-history" class="btn-text">Wissen</button>
+        </div>
+        <ul id="history-list" class="history-list"></ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>KringloopBoek &middot; Koop slim, betaal niet te veel</p>
+  </footer>
+
+  <!--
+    ZXing als fallback voor browsers zonder BarcodeDetector.
+    Chrome/Android en Samsung Internet hebben BarcodeDetector ingebouwd.
+    Firefox/Safari gebruiken ZXing als fallback.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.1/umd/index.min.js" onerror="console.warn('ZXing niet geladen — BarcodeDetector wordt gebruikt indien beschikbaar')"></script>
+  <script src="app.js"></script>
+</body>
+</html>
